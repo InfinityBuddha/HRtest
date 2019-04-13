@@ -10,10 +10,10 @@ const Telegram = () => {
             </div>
             <div className={s.workplaceWrapper}>
                 <div className={s.sidebar}>
-                    <div className={s.navigation}>
-                        <div className={s.hamburger}></div>
-                        <input className={s.search} type="text"/>
-                    </div>
+                    {/*<div className={s.navigation}>*/}
+                        {/*<div className={s.hamburger}></div>*/}
+                        {/*<input className={s.search} type="text"/>*/}
+                    {/*</div>*/}
                     <div className={s.user}>
                         <div className={s.avatar}>
                             ES
