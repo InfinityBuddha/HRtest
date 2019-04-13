@@ -1,0 +1,51 @@
+.sidebar {
+  width: 285px;
+  height: 100%;
+  overflow: auto;
+  flex-shrink: 0;
+}
+
+.user {
+  height: 55px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--hover-user-color);
+  }
+
+  .avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    width: 40px;
+    height: 40px;
+    background-color: #FFB965;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .info {
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .name {
+    color: #F973C3;
+  }
+  .lastMessage {
+    color: #485276;
+  }
+
+  .name,
+  .lastMessage {
+    font-size: var(--text-secondary-size);
+    margin: 0;
+  }
+}
