@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
-import Telegram from "./Telegram";
+import MainContainer from "./MainContainer";
 
 class App extends Component {
   render() {
