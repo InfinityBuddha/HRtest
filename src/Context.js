@@ -1,48 +1,60 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, createContext } from 'react'
 
-const initialState = { stage: 0, chat: [{ message: {text: 'Добрый день. Начнем нашу игру?'}}, { answer: {}}] };
-const MainContext = React.createContext(initialState);
+const initialState = {
+    stage: 0,
+    chat: [{ incomingMessage: {text: 'Добрый день. Начнем нашу игру?'}}, { outgoingMessage: {}}],
+    possibleAnswers: [
+        {text: 'Я не хочу у вас работать!', index: 0},
+        {text: 'Сколько ЗП дадите?', index: 1},
+        {text: 'Дашь мне свой номер?', index: 2}]
+};
 
 const stages = {
     0: {
-        answer: {
-            0: {
-                message: { text: 'Ну и пошел ты на хер!' }
-            }
-        }
+        incomingMessage: [
+            { text: 'Ну и пошел ты на хер!' },
+            { text: 'Да прибудет с тобой сила.' },
+            { text: 'Я думала мы с тобой друзья.' }
+        ]
+    },
+    1: {
+        incomingMessage: [
+            { text: 'Давайте 2' },
+            { text: 'Да прибудет с тобой сила.2' },
+            { text: 'Я думала мы с тобой друзья.2' }
+        ],
+        possibleAnswers: [
+            {text: 'Спаси и сохрани.', index: 0},
+            {text: 'Мне нравится малиновый чизкейк.', index: 1},
+            {text: 'Хочу 150к в неделю.', index: 2}
+        ]
     }
 };
 
-const reducer = (state, action) => {
-    console.log('ACTION:', action.type, state, action);
-    switch (action.type) {
-        case 'ADD_MESSAGE':
-            return {
-                ...state,
-                chat: [
-                    { message: [{text: 'Я вам не писала потому что думала что вы крутой разработчик'}] }
-                ]
-            };
+const MainContext = createContext(initialState);
 
+const reducer = (state, action) => {
+    console.log('ACTION:', action.type, action, state );
+    switch (action.type) {
         case 'ADD_ANSWER':
             return {
                 ...state,
-                answer: { text: action.payload.text, index: 0 }
+                outgoingMessage: { text: action.payload.text, index: 0 }
             };
 
         case 'GET_NEXT_STAGE':
-            console.log('stateanswer:', state.answer);
             return {
                 ...state,
                 chat: [
                     ...state.chat,
                     {
-                        answer: state.answer
+                        outgoingMessage: state.outgoingMessage
                     },
                     {
-                        message: stages[0].answer[0].message
+                        incomingMessage: stages[state.stage].incomingMessage[action.payload.index]
                     }
                 ],
+                possibleAnswers: stages[state.stage + 1].possibleAnswers,
                 stage: state.stage + 1
             };
         default:

@@ -7,40 +7,36 @@ const Telegram = () => {
     const { state, dispatch } = useContext(MainContext);
 
     const addAnswers = (e) => {
-        console.log('value:', e.target.innerText);
+        console.log('value:', e.target.innerText, e.target.dataset.index);
         dispatch({ type: 'ADD_ANSWER', payload: { text: e.target.innerText, index: 0 } });
-        dispatch({ type: 'GET_NEXT_STAGE' });
+        dispatch({ type: 'GET_NEXT_STAGE', payload: { index: e.target.dataset.index } });
     };
 
     return (
         <div className={s.chat}>
-            {console.log('context:', state)}
+            {console.log('state:', state)}
             <div className={s.messages}>
                 {state.chat.map(item => {
-                    {
-                        console.log(':', item)
-                    }
                     return (
                         <Fragment>
-                            {item.message && item.message.text && <div className={s.message}>
+                            {item.incomingMessage && item.incomingMessage.text && <div className={s.message}>
                                 <p className={s.text}>
-                                    {item.message && item.message.text}
+                                    {item.incomingMessage.text}
                                 </p>
                             </div>}
-                            {item.answer && item.answer.text &&
+                            {item.outgoingMessage && item.outgoingMessage.text &&
                             <div className={cx(s.message, s.answerMessage)}>
                                 <p className={s.text}>
-                                    {item.answer && item.answer.text}
+                                    {item.outgoingMessage.text}
                                 </p>
                             </div>}
                         </Fragment>)
                 })}
             </div>
             <div className={s.answerSection}>
-                <div className={s.possibleAnswer}><p className={s.text} onClick={(e) => addAnswers(e)}>Я не хочу у вас
-                    работать!</p></div>
-                <div className={s.possibleAnswer}><p className={s.text}>Сколько ЗП дадите?</p></div>
-                <div className={s.possibleAnswer}><p className={s.text}>Дашь мне свой номер?</p></div>
+                {state.possibleAnswers.map(answer => {
+                    return <div className={s.possibleAnswer}><p className={s.text} data-index={answer.index} onClick={(e) => addAnswers(e)}>{answer.text}</p></div>
+                })}
             </div>
         </div>
     );
