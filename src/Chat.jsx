@@ -7,7 +7,6 @@ const Telegram = () => {
     const { state, dispatch } = useContext(Store);
 
     const addAnswers = (e) => {
-        console.log('value:', e.target.innerText, e.target.dataset.index);
         dispatch({ type: 'ADD_ANSWER', payload: { text: e.target.innerText, index: 0 } });
         dispatch({ type: 'GET_NEXT_STAGE', payload: { index: e.target.dataset.index } });
     };

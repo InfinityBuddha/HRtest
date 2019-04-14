@@ -21,9 +21,9 @@ const stages = {
     },
     1: {
         incomingMessage: [
-            { text: 'Давайте 2' },
-            { text: 'Да прибудет с тобой сила.2' },
-            { text: 'Я думала мы с тобой друзья.2' }
+            { text: 'Давайте на ты' },
+            { text: 'Люблю тебя' },
+            { text: 'Нет!' }
         ],
         possibleAnswers: [
             {text: 'Спаси и сохрани.', index: 0},
@@ -33,8 +33,13 @@ const stages = {
     }
 };
 
+const customMiddleware = store => next => action => {
+    console.log("Action Triggered");
+    console.log(action);
+    next(action);
+};
+
 const reducer = (state, action) => {
-    console.log('ACTION:', action.type, action, state );
     switch (action.type) {
         case 'ADD_ANSWER':
             return {
@@ -64,13 +69,27 @@ const reducer = (state, action) => {
 
 const Store = createContext(initialState);
 
-const createStore = (reducer, initialState) => {
+const compose = (...funcs) => x =>
+    funcs.reduceRight((composed, f) => f(composed), x);
+
+const createStore = (reducer, initialState, middlewares) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+
+    if (typeof middlewares !== "undefined") {
+        const middlewareAPI = {
+            getState: () => state,
+            dispatch: action => dispatch(action)
+        };
+        const chain = middlewares.map(middleware => middleware(middlewareAPI));
+        const enhancedDispatch = compose(...chain)(dispatch);
+        return { state, dispatch: enhancedDispatch };
+    }
+
     return { state, dispatch };
 };
 
 function Provider(props) {
-    const store = createStore(reducer, initialState);
+    const store = createStore(reducer, initialState, [customMiddleware]);
     return (
         <Store.Provider value={store}>
             {props.children}
