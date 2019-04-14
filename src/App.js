@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { MainProvider } from "./Context";
-import MainContainer from "./MainContainer";
+import { Provider } from './store';
+import MainContainer from './MainContainer';
 
 class App extends Component {
     render() {
         return (
             <div className="App">
-                <MainProvider>
+                <Provider>
                     <MainContainer/>
-                </MainProvider>
+                </Provider>
             </div>
         );
     }

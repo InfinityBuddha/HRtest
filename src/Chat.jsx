@@ -1,10 +1,10 @@
 import React, { Fragment, useContext } from 'react';
-import { MainContext } from './Context';
+import { Store } from './store';
 import s from './Chat.module.scss';
 import cx from 'classnames';
 
 const Telegram = () => {
-    const { state, dispatch } = useContext(MainContext);
+    const { state, dispatch } = useContext(Store);
 
     const addAnswers = (e) => {
         console.log('value:', e.target.innerText, e.target.dataset.index);
