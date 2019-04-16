@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import s from './Sidebar.module.scss';
+import { Store } from "./store";
 
 const Sidebar = () => {
+    const { state, dispatch } = useContext(Store);
     return (
         <div className={s.sidebar}>
             {/*<div className={s.navigation}>*/}
@@ -14,89 +16,8 @@ const Sidebar = () => {
                     ES
                 </div>
                 <div className={s.info}>
-                    <p className={s.name}>Eva Summer</p>
-                    <p className={s.lastMessage}>Вам назначено собеседование</p>
-                </div>
-            </div>
-            <div className={s.user}>
-                <div className={s.avatar}>
-                    ES
-                </div>
-                <div className={s.info}>
-                    <p className={s.name}>Eva Summer</p>
-                    <p className={s.lastMessage}>Вам назначено собеседование</p>
-                </div>
-            </div>
-            <div className={s.user}>
-                <div className={s.avatar}>
-                    ES
-                </div>
-                <div className={s.info}>
-                    <p className={s.name}>Eva Summer</p>
-                    <p className={s.lastMessage}>Вам назначено собеседование</p>
-                </div>
-            </div>
-            <div className={s.user}>
-                <div className={s.avatar}>
-                    ES
-                </div>
-                <div className={s.info}>
-                    <p className={s.name}>Eva Summer</p>
-                    <p className={s.lastMessage}>Вам назначено собеседование</p>
-                </div>
-            </div>
-            <div className={s.user}>
-                <div className={s.avatar}>
-                    ES
-                </div>
-                <div className={s.info}>
-                    <p className={s.name}>Eva Summer</p>
-                    <p className={s.lastMessage}>Вам назначено собеседование</p>
-                </div>
-            </div>
-            <div className={s.user}>
-                <div className={s.avatar}>
-                    ES
-                </div>
-                <div className={s.info}>
-                    <p className={s.name}>Eva Summer</p>
-                    <p className={s.lastMessage}>Вам назначено собеседование</p>
-                </div>
-            </div>
-            <div className={s.user}>
-                <div className={s.avatar}>
-                    ES
-                </div>
-                <div className={s.info}>
-                    <p className={s.name}>Eva Summer</p>
-                    <p className={s.lastMessage}>Вам назначено собеседование</p>
-                </div>
-            </div>
-            <div className={s.user}>
-                <div className={s.avatar}>
-                    ES
-                </div>
-                <div className={s.info}>
-                    <p className={s.name}>Eva Summer</p>
-                    <p className={s.lastMessage}>Вам назначено собеседование</p>
-                </div>
-            </div>
-            <div className={s.user}>
-                <div className={s.avatar}>
-                    ES
-                </div>
-                <div className={s.info}>
-                    <p className={s.name}>Eva Summer</p>
-                    <p className={s.lastMessage}>Вам назначено собеседование</p>
-                </div>
-            </div>
-            <div className={s.user}>
-                <div className={s.avatar}>
-                    ES
-                </div>
-                <div className={s.info}>
-                    <p className={s.name}>Eva Summer</p>
-                    <p className={s.lastMessage}>Вам назначено собеседование</p>
+                    <p className={s.name}>Оленька</p>
+                    <p className={s.lastMessage}>{state.chat2[state.chat2.length - 1].message}</p>
                 </div>
             </div>
         </div>

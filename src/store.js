@@ -5,6 +5,8 @@ import React from "react";
 const initialState = {
     stage: 0,
     chat: [{ incomingMessage: {text: 'Добрый день. Начнем нашу игру?'}}, { outgoingMessage: {}}],
+    chat2: [{ message: 'Добрый день. Начнем нашу игру?', type: 'incoming'}],
+    answers: [],
     possibleAnswers: [
         {text: 'Я не хочу у вас работать!', index: 0},
         {text: 'Сколько ЗП дадите?', index: 1},
@@ -13,10 +15,10 @@ const initialState = {
 
 const stages = {
     0: {
-        incomingMessage: [
-            { text: 'Ну и пошел ты на хер!' },
-            { text: 'Да прибудет с тобой сила.' },
-            { text: 'Я думала мы с тобой друзья.' }
+        messages: [
+            { message: 'Ну и пошел ты на хер!', type: 'incoming' },
+            { message: 'Да прибудет с тобой сила.', type: 'incoming' },
+            { message: 'Я думала мы с тобой друзья.', type: 'incoming' }
         ]
     },
     1: {
@@ -44,20 +46,21 @@ const reducer = (state, action) => {
         case 'ADD_ANSWER':
             return {
                 ...state,
-                outgoingMessage: { text: action.payload.text, index: 0 }
+                chat2: [
+                    ...state.chat2,
+                    { message: action.payload.message, type: action.payload.type }],
+                answers: [
+                    ...state.answers,
+                    { message: action.payload.message, index: action.payload.index }
+                ]
             };
 
         case 'GET_NEXT_STAGE':
             return {
                 ...state,
-                chat: [
-                    ...state.chat,
-                    {
-                        outgoingMessage: state.outgoingMessage
-                    },
-                    {
-                        incomingMessage: stages[state.stage].incomingMessage[action.payload.index]
-                    }
+                chat2: [
+                    ...state.chat2,
+                    stages[state.stage].messages[action.payload.index]
                 ],
                 possibleAnswers: stages[state.stage + 1].possibleAnswers,
                 stage: state.stage + 1

@@ -7,7 +7,7 @@ const Telegram = () => {
     const { state, dispatch } = useContext(Store);
 
     const addAnswers = (e) => {
-        dispatch({ type: 'ADD_ANSWER', payload: { text: e.target.innerText, index: 0 } });
+        dispatch({ type: 'ADD_ANSWER', payload: { message: e.target.innerText, index: +e.target.dataset.index, type: 'outgoing' } });
         dispatch({ type: 'GET_NEXT_STAGE', payload: { index: e.target.dataset.index } });
     };
 
@@ -15,18 +15,18 @@ const Telegram = () => {
         <div className={s.chat}>
             {console.log('state:', state)}
             <div className={s.messages}>
-                {state.chat.map(item => {
+                {state.chat2.map(item => {
                     return (
                         <Fragment>
-                            {item.incomingMessage && item.incomingMessage.text && <div className={s.message}>
+                            {item.type === 'incoming' && <div className={s.message}>
                                 <p className={s.text}>
-                                    {item.incomingMessage.text}
+                                    {item.message}
                                 </p>
                             </div>}
-                            {item.outgoingMessage && item.outgoingMessage.text &&
+                            {item.type === 'outgoing' &&
                             <div className={cx(s.message, s.answerMessage)}>
                                 <p className={s.text}>
-                                    {item.outgoingMessage.text}
+                                    {item.message}
                                 </p>
                             </div>}
                         </Fragment>)
