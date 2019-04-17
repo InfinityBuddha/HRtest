@@ -1,5 +1,6 @@
 import React, { Fragment, useContext } from 'react';
 import { Store } from './store';
+import { ADD_ANSWER, GET_NEXT_STAGE } from './store';
 import s from './Chat.module.scss';
 import cx from 'classnames';
 
@@ -7,15 +8,15 @@ const Telegram = () => {
     const { state, dispatch } = useContext(Store);
 
     const addAnswers = (e) => {
-        dispatch({ type: 'ADD_ANSWER', payload: { message: e.target.innerText, index: +e.target.dataset.index, type: 'outgoing' } });
-        dispatch({ type: 'GET_NEXT_STAGE', payload: { index: e.target.dataset.index } });
+        dispatch({ type: ADD_ANSWER, payload: { message: e.target.innerText, index: +e.target.dataset.index, type: 'outgoing' } });
+        dispatch({ type: GET_NEXT_STAGE, payload: { index: e.target.dataset.index } });
     };
 
     return (
         <div className={s.chat}>
             {console.log('state:', state)}
             <div className={s.messages}>
-                {state.chat2.map(item => {
+                {state.chat.map(item => {
                     return (
                         <Fragment>
                             {item.type === 'incoming' && <div className={s.message}>

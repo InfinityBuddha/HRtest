@@ -40,6 +40,10 @@
     padding: var(--main-padding);
     cursor: pointer;
 
+    &:hover {
+      background-color: var(--message-bg-color);
+    }
+
     .text {
       text-align: center;
       font-weight: bold;

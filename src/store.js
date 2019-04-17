@@ -1,39 +1,57 @@
 import { createContext, useReducer } from "react";
 import React from "react";
 
+export const ADD_ANSWER = 'ADD_ANSWER';
+export const GET_NEXT_STAGE = 'GET_NEXT_STAGE';
 
 const initialState = {
     stage: 0,
-    chat: [{ incomingMessage: {text: 'Добрый день. Начнем нашу игру?'}}, { outgoingMessage: {}}],
-    chat2: [{ message: 'Добрый день. Начнем нашу игру?', type: 'incoming'}],
+    chat: [{ message: 'Добрый день. Начнем нашу игру?', type: 'incoming' }],
     answers: [],
     possibleAnswers: [
-        {text: 'Я не хочу у вас работать!', index: 0},
-        {text: 'Сколько ЗП дадите?', index: 1},
-        {text: 'Дашь мне свой номер?', index: 2}]
+        { text: 'Я не хочу у вас работать!', index: 0 },
+        { text: 'Сколько ЗП дадите?', index: 1 },
+        { text: 'Дашь мне свой номер?', index: 2 }]
 };
 
-const stages = {
-    0: {
+const stages = [
+    {
         messages: [
             { message: 'Ну и пошел ты на хер!', type: 'incoming' },
             { message: 'Да прибудет с тобой сила.', type: 'incoming' },
             { message: 'Я думала мы с тобой друзья.', type: 'incoming' }
         ]
     },
-    1: {
-        incomingMessage: [
-            { text: 'Давайте на ты' },
-            { text: 'Люблю тебя' },
-            { text: 'Нет!' }
+    {
+        messages: [
+            { message: 'Как дела брат?', type: 'incoming' },
+            { message: 'Твоя машина моя машина', type: 'incoming' },
+            { message: 'Есть 1000р в долг до завтра?', type: 'incoming' }
         ],
         possibleAnswers: [
-            {text: 'Спаси и сохрани.', index: 0},
-            {text: 'Мне нравится малиновый чизкейк.', index: 1},
-            {text: 'Хочу 150к в неделю.', index: 2}
+            { text: 'Спаси и сохрани.', index: 0 },
+            { text: 'Мне нравится малиновый чизкейк.', index: 1 },
+            { text: 'Хочу 150к в неделю.', index: 2 }
         ]
+    },
+    {
+        messages: [
+            { message: 'А я нет', type: 'incoming' },
+            { message: 'Если хочу то буду', type: 'incoming' },
+            { message: 'Хочу завтрак на обед', type: 'incoming' }
+        ],
+        possibleAnswers: [
+            { text: 'Рад подружиться', index: 0 },
+            { text: 'Хватит верстать диванами', index: 1 },
+            { text: 'Хочу летнюю резину', index: 2 }]
+    },
+    {
+        possibleAnswers: [
+            { text: 'Мне уже не смешно', index: 0 },
+            { text: 'Пепелсбей такой крутой', index: 1 },
+            { text: 'Марс снова стал белым', index: 2 }]
     }
-};
+];
 
 const customMiddleware = store => next => action => {
     console.log("Action Triggered");
@@ -43,11 +61,11 @@ const customMiddleware = store => next => action => {
 
 const reducer = (state, action) => {
     switch (action.type) {
-        case 'ADD_ANSWER':
+        case ADD_ANSWER:
             return {
                 ...state,
-                chat2: [
-                    ...state.chat2,
+                chat: [
+                    ...state.chat,
                     { message: action.payload.message, type: action.payload.type }],
                 answers: [
                     ...state.answers,
@@ -55,11 +73,11 @@ const reducer = (state, action) => {
                 ]
             };
 
-        case 'GET_NEXT_STAGE':
+        case GET_NEXT_STAGE:
             return {
                 ...state,
-                chat2: [
-                    ...state.chat2,
+                chat: [
+                    ...state.chat,
                     stages[state.stage].messages[action.payload.index]
                 ],
                 possibleAnswers: stages[state.stage + 1].possibleAnswers,

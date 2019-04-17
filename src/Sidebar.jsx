@@ -17,7 +17,7 @@ const Sidebar = () => {
                 </div>
                 <div className={s.info}>
                     <p className={s.name}>Оленька</p>
-                    <p className={s.lastMessage}>{state.chat2[state.chat2.length - 1].message}</p>
+                    <p className={s.lastMessage}>{state.chat[state.chat.length - 1].message}</p>
                 </div>
             </div>
         </div>
