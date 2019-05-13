@@ -1,6 +1,7 @@
 import { createContext, useReducer } from "react";
 import React from "react";
 
+export const ROUND_OVER = 'ROUND_OVER';
 export const ADD_ANSWER = 'ADD_ANSWER';
 export const GET_NEXT_STAGE = 'GET_NEXT_STAGE';
 
@@ -53,14 +54,86 @@ const stages = [
     }
 ];
 
+const rounds = [
+    {
+        round: 0,
+        stages: [
+            {
+                messages: [
+                    { message: 'Ну и пошел ты на хер!', type: 'incoming' },
+                    { message: 'Да прибудет с тобой сила.', type: 'incoming' },
+                    { message: 'Я думала мы с тобой друзья.', type: 'incoming' }
+                ]
+            },
+            {
+                messages: [
+                    { message: 'Как дела брат?', type: 'incoming' },
+                    { message: 'Твоя машина моя машина', type: 'incoming' },
+                    { message: 'Есть 1000р в долг до завтра?', type: 'incoming' }
+                ],
+                possibleAnswers: [
+                    { text: 'Спаси и сохрани.', index: 0 },
+                    { text: 'Мне нравится малиновый чизкейк.', index: 1 },
+                    { text: 'Хочу 150к в неделю.', index: 2 }
+                ]
+            },
+            {
+                messages: [
+                    { message: 'А я нет', type: 'incoming' },
+                    { message: 'Если хочу то буду', type: 'incoming' },
+                    { message: 'Хочу завтрак на обед', type: 'incoming' }
+                ],
+                possibleAnswers: [
+                    { text: 'Рад подружиться', index: 0 },
+                    { text: 'Хватит верстать диванами', index: 1 },
+                    { text: 'Хочу летнюю резину', index: 2 }]
+            },
+            {
+                possibleAnswers: [
+                    { text: 'Мне уже не смешно', index: 0 },
+                    { text: 'Пепелсбей такой крутой', index: 1 },
+                    { text: 'Марс снова стал белым', index: 2 }]
+            }
+        ]
+    },
+    {
+        round: 1,
+        stages: [
+            {
+                messages: [
+                    { message: 'New Round', type: 'incoming' },
+                    { message: 'New Round', type: 'incoming' },
+                    { message: 'New Round', type: 'incoming' }
+                ],
+                possibleAnswers: [
+                    { text: 'New Round', index: 0 },
+                    { text: 'New Round', index: 1 },
+                    { text: 'New Round', index: 2 },
+                ]
+            }
+        ]
+    }
+];
+
 const customMiddleware = store => next => action => {
     console.log("Action Triggered");
     console.log(action);
     next(action);
 };
 
+const checkNewRoundMiddleware = store => next => action => {
+    console.log(store.getState().stage, stages.length);
+    next(action);
+};
+
 const reducer = (state, action) => {
     switch (action.type) {
+        case ROUND_OVER:
+            return {
+                ...state,
+                possibleAnswers: [{text: 'Раунд завершен!', index: 0}]
+            };
+
         case ADD_ANSWER:
             return {
                 ...state,
@@ -110,7 +183,7 @@ const createStore = (reducer, initialState, middlewares) => {
 };
 
 function Provider(props) {
-    const store = createStore(reducer, initialState, [customMiddleware]);
+    const store = createStore(reducer, initialState, [customMiddleware, checkNewRoundMiddleware]);
     return (
         <Store.Provider value={store}>
             {props.children}
