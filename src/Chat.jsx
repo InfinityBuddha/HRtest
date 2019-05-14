@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from 'react';
-import { Store, ADD_ANSWER, GET_NEXT_STAGE, ROUND_OVER } from './store';
+import { Store, ADD_ANSWER, GET_NEXT_STAGE, ROUND_OVER, CHECK_ROUND_OVER } from './store';
 import s from './Chat.module.scss';
 import cx from 'classnames';
 
@@ -7,47 +7,49 @@ const Telegram = () => {
     const { state, dispatch } = useContext(Store);
 
     const addAnswers = (e) => {
+        console.log('state:', state);
         // if questions is not over
-        if (state.answers.length <= 2) {
+        console.log('e:', e.target.innerText);
+        if (e.target.innerText !== 'Раунд завершен!') {
             dispatch({
-                type: ADD_ANSWER, payload: { message: e.target.innerText, index: +e.target.dataset.index, type: 'outgoing' }
+                type: ADD_ANSWER,
+                payload: { message: e.target.innerText, index: +e.target.dataset.index, type: 'outgoing' }
             });
             dispatch({ type: GET_NEXT_STAGE, payload: { index: e.target.dataset.index } });
         } else {
-            dispatch({ type: ROUND_OVER })
+            dispatch({ type: ROUND_OVER });
         }
         // else next round
     };
 
-
-return (
-    <div className={s.chat}>
-        {console.log('state:', state)}
-        <div className={s.messages}>
-            {state.chat.map(item => {
-                return (
-                    <Fragment>
-                        {item.type === 'incoming' && <div className={s.message}>
-                            <p className={s.text}>
-                                {item.message}
-                            </p>
-                        </div>}
-                        {item.type === 'outgoing' &&
-                        <div className={cx(s.message, s.answerMessage)}>
-                            <p className={s.text}>
-                                {item.message}
-                            </p>
-                        </div>}
-                    </Fragment>)
-            })}
+    return (
+        <div className={s.chat}>
+            <div className={s.messages}>
+                {state.chat.map(item => {
+                    return (
+                        <Fragment>
+                            {item.type === 'incoming' && <div className={s.message}>
+                                <p className={s.text}>
+                                    {item.message}
+                                </p>
+                            </div>}
+                            {item.type === 'outgoing' &&
+                            <div className={cx(s.message, s.answerMessage)}>
+                                <p className={s.text}>
+                                    {item.message}
+                                </p>
+                            </div>}
+                        </Fragment>)
+                })}
+            </div>
+            <div className={s.answerSection}>
+                {state.possibleAnswers.map(answer => {
+                    return <div className={s.possibleAnswer}><p className={s.text} data-index={answer.index}
+                                                                onClick={(e) => addAnswers(e)}>{answer.text}</p></div>
+                })}
+            </div>
         </div>
-        <div className={s.answerSection}>
-            {state.possibleAnswers.map(answer => {
-                return <div className={s.possibleAnswer}><p className={s.text} data-index={answer.index}
-                                                            onClick={(e) => addAnswers(e)}>{answer.text}</p></div>
-            })}
-        </div>
-    </div>
-)};
+    )
+};
 
 export default Telegram;
