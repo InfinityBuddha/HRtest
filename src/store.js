@@ -3,28 +3,27 @@ import React from "react";
 
 export const ROUND_OVER = 'ROUND_OVER';
 export const INIT_ROUND = 'INIT_ROUND';
+export const INCREMENT_STAGE = 'INCREMENT_STAGE';
 export const ADD_ANSWER = 'ADD_ANSWER';
 export const GET_NEXT_STAGE = 'GET_NEXT_STAGE';
 
 const initialState = {
     stage: 0,
-    chat: [{ message: 'Добрый день. Начнем нашу игру?', type: 'incoming' }],
+    chat: [],
     answers: [],
-    possibleAnswers: [
-        { text: 'Я не хочу у вас работать!', index: 0 },
-        { text: 'Сколько ЗП дадите?', index: 1 },
-        { text: 'Дашь мне свой номер?', index: 2 }]
+    possibleAnswers: []
 };
 
 const stages = [
     {
         messages: [
-            { message: 'Добрый день. Начнем нашу игру?', type: 'incoming' },
+            { message: 'Добрый день. Начнем нашу игру?', type: 'incoming' }
         ],
         possibleAnswers: [
             { text: 'Я не хочу у вас работать!', index: 0 },
             { text: 'Сколько ЗП дадите?', index: 1 },
-            { text: 'Дашь мне свой номер?', index: 2 }]
+            { text: 'Дашь мне свой номер?', index: 2 }
+        ]
     },
     {
         messages: [
@@ -64,10 +63,17 @@ const stages = [
     }
 ];
 
+const game = [{
+    round: 0,
+    numberOfStages: 3,
+    messages: [
+
+    ]
+}];
+
 const customMiddleware = store => next => action => {
     console.log("Action Triggered");
     console.log(action);
-    console.log(store.getState());
     next(action);
 };
 
@@ -79,13 +85,18 @@ const reducer = (state, action) => {
                 round: 0
             };
 
+        case INCREMENT_STAGE:
+            return {
+                ...state,
+                stage: state.stage + 1
+            }
+
         case ROUND_OVER:
             return {
                 ...state,
                 chat: [
                     ...state.chat,
-                    { message: 'Похоже ты прошел первый раунд!', type: 'incoming' }],
-                round: state.round + 1
+                    { message: 'Похоже ты прошел первый раунд!', type: 'incoming' }]
             };
 
         case ADD_ANSWER:
@@ -97,8 +108,7 @@ const reducer = (state, action) => {
                 answers: [
                     ...state.answers,
                     { message: action.payload.message, index: action.payload.index }
-                ],
-                roundIsOver: typeof stages[state.stage + 1].messages === 'undefined'
+                ]
             };
 
         case GET_NEXT_STAGE:
@@ -106,10 +116,9 @@ const reducer = (state, action) => {
                 ...state,
                 chat: [
                     ...state.chat,
-                    stages[state.stage].messages[action.payload.index]
+                    stages[state.stage - 1].messages[action.payload.index]
                 ],
-                possibleAnswers: stages[state.stage + 1].possibleAnswers,
-                stage: state.stage + 1
+                possibleAnswers: stages[state.stage].possibleAnswers,
             };
         default:
             return state;

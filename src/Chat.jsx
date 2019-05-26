@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from 'react';
-import { Store, ADD_ANSWER, GET_NEXT_STAGE, ROUND_OVER, CHECK_ROUND_OVER } from './store';
+import { Store, ADD_ANSWER, GET_NEXT_STAGE, ROUND_OVER, INCREMENT_STAGE } from './store';
 import s from './Chat.module.scss';
 import cx from 'classnames';
 
@@ -7,10 +7,11 @@ const Telegram = () => {
     const { state, dispatch } = useContext(Store);
 
     const addAnswers = (e) => {
-        console.log('state:', state);
         // if questions is not over
-        console.log('e:', e.target.innerText);
         if (e.target.innerText !== 'Раунд завершен!') {
+            dispatch({
+                type: INCREMENT_STAGE
+            });
             dispatch({
                 type: ADD_ANSWER,
                 payload: { message: e.target.innerText, index: +e.target.dataset.index, type: 'outgoing' }
@@ -25,7 +26,8 @@ const Telegram = () => {
     return (
         <div className={s.chat}>
             <div className={s.messages}>
-                {state.chat.map(item => {
+                {console.log('state:', state)}
+                {state.chat && state.chat.map(item => {
                     return (
                         <Fragment>
                             {item.type === 'incoming' && <div className={s.message}>
@@ -43,7 +45,7 @@ const Telegram = () => {
                 })}
             </div>
             <div className={s.answerSection}>
-                {state.possibleAnswers.map(answer => {
+                {state.possibleAnswers && state.possibleAnswers.map(answer => {
                     return <div className={s.possibleAnswer}><p className={s.text} data-index={answer.index}
                                                                 onClick={(e) => addAnswers(e)}>{answer.text}</p></div>
                 })}
