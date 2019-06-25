@@ -30,6 +30,11 @@ const stages = [
             { message: 'Ну и пошел ты на хер!', type: 'incoming' },
             { message: 'Да прибудет с тобой сила.', type: 'incoming' },
             { message: 'Я думала мы с тобой друзья.', type: 'incoming' }
+        ],
+        possibleAnswers: [
+            { text: '0.', index: 0 },
+            { text: '1.', index: 1 },
+            { text: '2.', index: 2 }
         ]
     },
     {
@@ -59,7 +64,7 @@ const stages = [
         messages: [
             { message: 'Похоже раунд закончен друг!', type: 'incoming' },
         ],
-        possibleAnswers: [{ text: 'Раунд завершен!', index: 0 }]
+        possibleAnswers: [{ text: 'Раунд завершен!', index: 0, type: 'round_over' }]
     }
 ];
 
@@ -89,7 +94,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 stage: state.stage + 1
-            }
+            };
 
         case ROUND_OVER:
             return {
